@@ -1,2 +1,1 @@
-# PythonNotes
-Python Notes 
+# Python Notes 
