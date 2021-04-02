@@ -55,3 +55,6 @@ path = Path().cwd()
 data_file = path.parent / "Data" / "Actors.csv"
 
 
+from tabulate import tabulate
+import sys
+!conda install --yes --prefix {sys.prefix} tabulate

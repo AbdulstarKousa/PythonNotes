@@ -2,18 +2,19 @@
 # sklearn
 #####################
 
-
+'PreProcessing'
 # from sklearn.model_selection import train_test_split, KFold, StratifiedKFold, GridSearchCV
 # from sklearn import preprocessing
 
+'Models'
 # from sklearn.neighbors import KNeighborsClassifier
 # from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 # from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor, plot_tree
-# from sklearn.ensemble import BaggingClassifier
+# from sklearn.ensemble import BaggingClassifier, RandomForestClassifier, AdaBoostClassifier
 
+'Others'
 # from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 # from sklearn.cluster import KMeans
-
 # from sklearn.metrics import roc_curve, auc, confusion_matrix, ConfusionMatrixDisplay
 
 
