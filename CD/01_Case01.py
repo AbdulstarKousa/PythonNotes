@@ -265,6 +265,8 @@ pyplot.show()
     - Explore Tree Depth (max_depth)            = None (default: arbitrary depth do not prune)
     - Explore Number of Trees (n_estimators) = ?
     - Explore Minimum Node Size (min_samples_leaf) = ? 
+
+    See Teacher implementation of week 06: 
 """
 
 # Random Grid Search for hyperparameters focus  

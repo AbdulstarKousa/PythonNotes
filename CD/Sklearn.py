@@ -146,3 +146,9 @@ https://scikit-learn.org/stable/modules/generated/sklearn.metrics.log_loss.html
 """
 
 
+clf = RandomForestClassifier(bootstrap=True, oob_score=True, criterion = 'gini',random_state=0)
+"""
+"""
+
+
+s
