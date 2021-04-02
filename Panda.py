@@ -105,3 +105,5 @@
 # .iloc()
 
 # .sample(frac=1) """ shuffle rows"""
+# .drop(columns=[])
+# .rename(columns={colName:toColName})

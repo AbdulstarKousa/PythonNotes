@@ -1,4 +1,3 @@
-
 # function to youtube play videos in Chrome 
 def open_in_chrome(url,path = "C://Program Files (x86)//Google//Chrome//Application//chrome.exe"):
     # takes youtube video ID
