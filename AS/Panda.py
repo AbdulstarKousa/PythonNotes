@@ -111,3 +111,5 @@
 
 # Table = pd.pivot_table(df_crimes, index = "Hour", columns = "Category", values = 'PdId' ,aggfunc = 'count')
 # The above is equivalent to using .groupby(), then using .unstack().
+
+# .select_dtypes(include=object)
