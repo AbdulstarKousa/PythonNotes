@@ -78,8 +78,10 @@
 # data['colName'].values()
 
 
-
-
+####### examples: 
+# fileName = 'MVC_SL_W_Final.csv'
+# filePath = os.path.abspath(os.path.join(os.getcwd(), fileName))
+# Data.to_csv(filePath)
 
 
 ####### ref 
@@ -105,3 +107,17 @@
 # .iloc()
 
 # .sample(frac=1) """ shuffle rows"""
+# .drop(columns=[])
+# .rename(columns={colName:toColName})
+
+
+# Table = pd.pivot_table(df_crimes, index = "Hour", columns = "Category", values = 'PdId' ,aggfunc = 'count')
+# The above is equivalent to using .groupby(), then using .unstack().
+
+# .select_dtypes(include=object)
+
+# .to_frame()
+
+
+
+

@@ -195,9 +195,15 @@ tuple(ls)
 # dictionaries:
 #################################
 
-# format
-dic={key1:val1,....,keyn:valn}
-dic= dict(zip(keys, values))
+# syntax
+dic = {key1:val1, ..}
+dic = dict(zip(keys, values))
+
+# Initilize and empty dic
+dic = {}
+
+# Add new_key:new_value 
+dic[new_key]= new_value
 
 # get a key value
 dic[key] 
@@ -210,6 +216,22 @@ dic.keys()
 
 # get values 
 dic.values()
+
+
+
+#################################
+# Map:
+#################################
+# Syntax 
+map(func, lst)
+
+# Example: 
+map(str, Table['Hours'].values)
+
+# Get values: 
+list(map(str, Table['Hours'].values))
+
+
 
 
 #################################
@@ -413,3 +435,28 @@ random.random()
 zip(lst1,lst2)
 zip(*lst)
 
+
+#################################
+# examples: 
+#################################
+"""
+import sys, gc
+
+def create_cycle():
+    list = [8, 9, 10]
+    list.append(list)
+
+def main():
+    print("Creating garbage...")
+    for i in range(8):
+        create_cycle()
+
+    print("Collecting...")
+    n = gc.collect()
+    print("Number of unreachable objects collected by GC:", n)
+    print("Uncollectable garbage:", gc.garbage)
+
+if __name__ == "__main__":
+    main()
+    sys.exit()
+"""
