@@ -64,6 +64,14 @@ plt.xlabel("string")
 # ticks
 plt.xticks(x, str_lst,rotation='vertical')
 plt.yticks(y, str_lst,rotation='vertical')
+"""
+ticks = np.arange(0,len(Data.select_dtypes(exclude=object).columns),1)
+ax.set_xticks(ticks)
+ax.set_yticks(ticks)
+ax.set_xticklabels(['Zip', 'LAT.', 'LONG.', 'Injured','killed', 'Response', 'Year', 'Month', 'Day', 'Hour','Minute', 'S.L.M.', 'Pre.', 'S.F.','S. D.', 'F.S.H.', 
+"""
+
+
 
 # log(y)
 plt.yscale('log')
