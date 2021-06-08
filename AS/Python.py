@@ -460,3 +460,12 @@ if __name__ == "__main__":
     main()
     sys.exit()
 """
+
+
+
+def main():
+    test_lcg()
+    test_system_available_generator()
+
+if __name__ == "__main__":
+    main()

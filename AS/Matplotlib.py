@@ -2,7 +2,6 @@
 @author: Abdulstar Kousa 
 Matplotlib Notes 
 """
-
 #################################
 # 0. library: 
 #################################
@@ -12,6 +11,9 @@ from matplotlib import pyplot as plt
 #################################
 # 1. CurvePlot:
 #################################
+
+# ax
+plt.gca()
 
 # Cordenates:
 x1 = [ls]
@@ -62,6 +64,7 @@ plt.ylabel("string")
 plt.xlabel("string")
 
 # ticks
+plt.xticks(ticks=bins, labels=labels)
 plt.xticks(x, str_lst,rotation='vertical')
 plt.yticks(y, str_lst,rotation='vertical')
 """
@@ -149,3 +152,33 @@ plt.figure(figsize=(8, 8))
 sns.stripplot(data_WL['Time'].values, jitter=True, edgecolor='none', alpha=.50 ,color='k').set_title('Robbery\nJan to Jul\n13:00-14:00')
 plt.show()
 
+
+#################################
+# Examples: 
+#################################
+
+""" 1 """
+plt.figure(figsize=(8,6)) # define the figure size 
+#plt.title('Title Needed') # Having a title is always needed for plots :) 
+plt.ylabel('$E_{1D} - E_{bulk}$  (eV/atom)')
+plt.xlabel('$s_{0} + s_{01} + s_{1}$') # The '$' signs allow to use latex formated string
+
+plt.xlim([0.5, 1]) # Set x-axis range 
+ax = plt.gca() # Take the plot needed to play with xticks 
+bins = np.arange(0.5, 1.05, 0.1) # Define the bins - Here we have as a max limit 1.05 to include 1 
+bins_labels = [str(np.round(i,1)) for i in bins] # Define the bins as list of string items - Here we do round to 1 dec to prevent having to many decimals in the plot due to machine error  
+ax.set_xticks(bins) # This is our xticks
+ax.set_xticklabels(bins_labels) # This is what we want to show instead of our xticks (Here by chance the replaced one and xticks are the same but in general this could be any list of string that have the same size as our xticks)
+
+inds  = np.digitize(x,bins) # Return the indices (place) of the bins to which each value from input array x belongs
+means = [np.mean(y[inds==i]) for i in list(set(inds))] # Calculate the means ask if needed 
+stds   = [np.std(y[inds==i], ddof=1) for i in list(set(inds))] # Calculate the std ask if needed
+delta = bins[1]-bins[0] # to center of each bin 
+mid_bins = bins - delta/2 # Center of each bin
+mid_bins = mid_bins[1:] # need to be deleted since it is less than the left bordar of the first bin
+
+plt.plot(x,y,'bo',markersize=2) # Plot x vs y values
+plt.errorbar(mid_bins, means, stds, linestyle='None', marker='o', color='r') # Plot mean and standard deviation
+plt.grid(True) # squares in the plot 
+plt.savefig('Title Needed') # save to same directory 
+plt.show() 
