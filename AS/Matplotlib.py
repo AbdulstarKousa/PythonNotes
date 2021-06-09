@@ -182,3 +182,17 @@ plt.errorbar(mid_bins, means, stds, linestyle='None', marker='o', color='r') # P
 plt.grid(True) # squares in the plot 
 plt.savefig('Title Needed') # save to same directory 
 plt.show() 
+
+
+""" 2 density """
+def Visual_Histogram(x, n_bins = 10):
+    bins = np.linspace(min(x), max(x), n_bins + 1)    
+    weights = np.ones(len(x))/len(x)
+    plt.hist(x, n_bins, weights=weights, ec='black') # ec short for "edgecolor"
+    plt.title("Density Histogram")
+    plt.xlabel("Classes")
+    plt.xticks(ticks=bins, labels=[str(xi) for xi in np.round(bins,2)])
+    plt.ylabel("Density")
+    plt.show()
+Visual_Histogram(x, n_bins = 10)
+
