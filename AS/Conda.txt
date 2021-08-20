@@ -1,0 +1,43 @@
+#------------------------------- General
+python --version
+conda -V
+conda update conda
+
+
+#------------------------------- Conda working with envs:
+# Create (a data science) environment
+conda create -name myenv python=3.7 pandas jupyter seaborn scikit-learn keras tensorflow
+
+# List all environments:
+conda env list
+
+# List all environments (info):
+conda info --envs
+
+# Activate an environment:
+conda activate python38
+
+# List all environment packages:
+conda list
+
+# Install package in an environment:
+conda install –name myenv scipy=0.15.0  
+
+# Install packages in an environment after activating it:
+conda install pandas jupyter
+
+# To delete an an environment
+conda remove --name myenv --all
+
+
+
+
+
+#------------------------------- Links:
+https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html
+https://www.anaconda.com/blog/understanding-and-improving-condas-performance
+https://code.visualstudio.com/docs/python/data-science-tutorial
+https://code.visualstudio.com/docs/python/python-tutorial
+https://www.tutorialspoint.com/add-packages-to-anaconda-environment-in-python
+https://stackoverflow.com/questions/58568175/upgrade-to-python-3-8-using-conda
+https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/

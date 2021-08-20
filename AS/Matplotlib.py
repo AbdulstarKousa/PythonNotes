@@ -196,3 +196,16 @@ def Visual_Histogram(x, n_bins = 10):
     plt.show()
 Visual_Histogram(x, n_bins = 10)
 
+
+
+def density_Histogram(x, n_bins = 10, figsize=(10,6), title= "Density Histogram", xlabel= 'Classes', ylabel='Density', xticks=False):
+    plt.figure(figsize=figsize)
+    n_bins = n_bins
+    bins = np.linspace(min(x), max(x), n_bins + 1)    
+    weights = np.ones(len(x))/len(x)
+    plt.hist(x, n_bins, weights=weights, ec='black') # ec short for "edgecolor"
+    plt.title(title)
+    plt.xlabel(xlabel)
+    if xticks : plt.xticks(ticks=bins, labels=[str(xi) for xi in np.round(bins,2)])
+    plt.ylabel(ylabel)
+    plt.show()
