@@ -30,9 +30,6 @@ conda install pandas jupyter
 conda remove --name myenv --all
 
 
-
-
-
 #------------------------------- Links:
 https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html
 https://www.anaconda.com/blog/understanding-and-improving-condas-performance
