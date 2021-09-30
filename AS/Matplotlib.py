@@ -5,7 +5,10 @@ Matplotlib Notes
 #################################
 # 0. library: 
 #################################
-from matplotlib import pyplot as plt
+from operator import imod
+import IPython
+from IPython.lib.display import YouTubeVideo
+from matplotlib import pyplot as plt, style
 
 
 #################################
@@ -209,3 +212,25 @@ def density_Histogram(x, n_bins = 10, figsize=(10,6), title= "Density Histogram"
     if xticks : plt.xticks(ticks=bins, labels=[str(xi) for xi in np.round(bins,2)])
     plt.ylabel(ylabel)
     plt.show()
+
+
+from IPython import YouTubeVideo
+
+YouTubeVideo()
+
+
+""" more """
+import matplotlib as mpl
+mpl.rcParams.update(mpl.rcParamsDefault)
+
+from matplotlib.pyplot import style
+style.use('ggplot')
+
+%matplotlib inline
+
+from IPython.display import display
+from IPython import get_ipython
+get_ipython().run_line_magic('matplotlib', 'inline')
+
+
+ax = plt.gca()
