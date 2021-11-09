@@ -1,10 +1,10 @@
-#------------------------------- General
+################################# General:
 python --version
 conda -V
 conda update conda
 
 
-#------------------------------- Conda working with envs:
+################################# Conda working with envs:
 # Create (a data science) environment
 conda create -name myenv python=3.7 pandas jupyter seaborn scikit-learn keras tensorflow
 
@@ -30,7 +30,7 @@ conda install pandas jupyter
 conda remove --name myenv --all
 
 
-#------------------------------- Links:
+################################# Links:
 https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html
 https://www.anaconda.com/blog/understanding-and-improving-condas-performance
 https://code.visualstudio.com/docs/python/data-science-tutorial
