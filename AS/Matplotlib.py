@@ -138,7 +138,7 @@ axs[i].set_xlabel('Weekdays')
 axs[i].set_xticklabels(counts.index, rotation=-10)
 
 
-
+enumerate 
 
 #################################
 # 6. Style:

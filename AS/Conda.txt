@@ -1,34 +1,55 @@
 ################################# General:
 python --version
 conda -V
+
+
+################################# Stable environment with no dependency conflicts:
+conda update --force conda
+conda update anaconda
 conda update conda
 
 
-################################# Conda working with envs:
-# Create (a data science) environment
-conda create -name myenv python=3.7 pandas jupyter seaborn scikit-learn keras tensorflow
+################################# Clean remove unused packages from the cache: 
+conda clean --all
+conda clean --force-pkgs-dirs # WARNING: This will break environments with packages installed using symlinks back to the package cache.
 
+
+################################# Conda working with envs:
 # List all environments:
 conda env list
-
-# List all environments (info):
 conda info --envs
-
-# Activate an environment:
-conda activate python38
 
 # List all environment packages:
 conda list
 
-# Install package in an environment:
-conda install –name myenv scipy=0.15.0  
+# Create (a data science) environment
+conda create -n ds python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
 
-# Install packages in an environment after activating it:
+# Delete an environment
+conda remove --name dsc --all
+
+# Activate an environment:
+conda activate myenv
+
+# Deactivate an environment:
+conda deactivate
+
+# Install package in an environment:
+conda install –-name myenv scipy=0.15.0  
+
+# Install packages:
 conda install pandas jupyter
 
-# To delete an an environment
-conda remove --name myenv --all
+# Update a package:
+pip install pandas --upgrade
 
+# Delete a package:
+conda remove pytorch torchvision cudatoolkit
+
+
+################################# requirements:
+# pip freeze > requirements.txt
+# pip install -r requirements.txt
 
 ################################# Links:
 https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html

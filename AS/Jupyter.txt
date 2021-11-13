@@ -8,7 +8,10 @@ conda activate 'environment_name'
 pip install --user ipykernel
 
 ## Add the new virtual environment to Jupyter
-python -m ipykernel install --user --name='environment_name'
+python -m ipykernel install --user --name='dsc'
+python -m ipykernel install --user --name=dataScience
+
+
 
 ## To list existing Jupyter virtual environments
 jupyter kernelspec list
@@ -17,7 +20,7 @@ jupyter kernelspec list
 conda env list
 
 ## To remove conda environment
-conda env remove -n 'environment_name'
+conda env remove -n dsc
 
 ## To remove the environment from Jupyter
-jupyter kernelspec uninstall 'environment_name'
+jupyter kernelspec uninstall dsc
