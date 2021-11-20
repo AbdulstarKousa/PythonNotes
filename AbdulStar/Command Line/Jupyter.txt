@@ -11,8 +11,6 @@ pip install --user ipykernel
 python -m ipykernel install --user --name='dsc'
 python -m ipykernel install --user --name=dataScience
 
-
-
 ## To list existing Jupyter virtual environments
 jupyter kernelspec list
 

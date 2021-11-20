@@ -1,7 +1,7 @@
 ################################# General:
 python --version
 conda -V
-
+-q
 
 ################################# Stable environment with no dependency conflicts:
 conda update --force conda
