@@ -47,6 +47,25 @@ pip install pandas --upgrade
 conda remove pytorch torchvision cudatoolkit
 
 
+################################# Jupyter:
+# Make sure that ipykernel is installed
+pip install --user ipykernel
+
+# Add the new virtual environment to Jupyter
+python -m ipykernel install --user --name=dataScience
+
+# List existing Jupyter virtual environments
+jupyter kernelspec list
+
+# List existing conda environments
+conda env list
+
+# Remove conda environment
+conda env remove -n dsc
+
+# Remove the environment from Jupyter
+jupyter kernelspec uninstall dsc
+
 ################################# requirements:
 # pip freeze > requirements.txt
 # pip install -r requirements.txt
