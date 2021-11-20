@@ -293,6 +293,24 @@
 # print(fileVarName.name)
 
 
+# #################################
+# # Generators and Iterators
+# #################################
+# def lazy_range(n):
+#     """a lazy version of range"""
+#     i = 0
+#     while i < n:
+#         yield i
+#         i += 1
+
+# def natural_numbers():
+#     """returns 1, 2, 3, ..."""
+#     n = 1
+#     while True:
+#         yield n
+#         n += 1
+
+# 10000 in natural_numbers()
 
 
 
