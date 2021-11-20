@@ -92,3 +92,16 @@
 # V3=V1+V2 
 # print(V3.norm())
 # V3.print()
+
+
+
+# #################################
+# # Main
+# #################################
+# if __name__ == "__main__": 
+#     # Question 01.AB
+#     Run_Question_1_A_B()
+#     # Question 01.C
+#     Run_Question_1_C()
+#     # Question 02
+#     Run_Question_2()

@@ -72,8 +72,7 @@
 # #################################
 # # variables:
 # #################################
- 
-# """
+ # """
 # you don't need to specify the type of the var when declaring it.
 # """
 
@@ -380,3 +379,5 @@
 # print(f'{"mean =":<6} {np.round(crude_values["mean"],3)}\n'\
 #       f'{"std  =":<6} {np.round(crude_values["std"],3)}\n'\
 #       f'{"CI   =":<6} ({np.round(crude_values["CI"][0],3)}, {np.round(crude_values["CI"][1],3)})')
+
+
