@@ -63,6 +63,7 @@ sc = pyspark.SparkContext(conf=conf)
 spark = SparkSession.builder.getOrCreate()
 
 
+
 # ==================  Initilize Dynamic:
 sc = None
 def configured_spark_session(parallelism=None, shuffle_partitions=None, mem='4g'):
@@ -92,6 +93,8 @@ def configured_spark_session(parallelism=None, shuffle_partitions=None, mem='4g'
 spark = configured_spark_session()
 sc.getConf().getAll()
 spark
+
+
 
 # ==================  Methods:
 # spark.read: 
