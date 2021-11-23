@@ -1,7 +1,9 @@
 ################################# General:
-python --version
-conda -V
--q
+python --version    /* python version */
+conda -V            /* conda version  */
+-q                  /* after install to quit the print */ 
+-- user             /* at the end of install command to suits your os */
+
 
 ################################# Stable environment with no dependency conflicts:
 conda update --force conda
@@ -49,7 +51,7 @@ pip install pyspark --upgrade
 
 # Delete a package:
 conda remove pytorch torchvision cudatoolkit
-
+conda remove pandas-profiling
 
 ################################# Jupyter:
 # Make sure that ipykernel is installed
