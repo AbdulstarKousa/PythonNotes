@@ -1,3 +1,9 @@
+# ================== Toturial:
+"""
+https://towardsdatascience.com/a-neanderthals-guide-to-apache-spark-in-python-9ef1f156d427
+"""
+
+
 # ================== install:
 # Install java 
 """
@@ -7,7 +13,7 @@ install JDK version should be 8 or 11
 # For Anaconda:
 """
 !conda install -c cyclus java-jdk
-
+!conda install -c conda-forge pyspark
 """
 
 # Setup Variables
@@ -27,23 +33,33 @@ import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark import SparkContext, SparkConf
-import os
-os.environ["JAVA_HOME"] = "C:\Program Files\Java\jdk-11.0.12" 
-os.environ['PYSPARK_PYTHON'] = 'python'
-os.environ['PYSPARK_DRIVER_PYTHON'] = 'jupyter'
-os.environ['PYSPARK_DRIVER_PYTHON_OPTS'] = 'notebook'
 
 # related 
-import pandas
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-# %matplotlib inline
+from IPython import get_ipython
+get_ipython().run_line_magic('matplotlib', 'inline')
+import seaborn as sns
+sns.set()
+
 
 
 # ==================  Initilize:
+# Without Seting memory and CPU cores
 conf  = SparkConf().set("spark.ui.port", "4050")
 sc    = pyspark.SparkContext(conf=conf)
 spark = SparkSession.builder.getOrCreate()
 spark
+
+# Sets memory limit on driver and to use all CPU cores
+conf = SparkConf()\
+        .set('spark.ui.port', '4050') \
+        .set('spark.driver.memory', '4g') \
+        .setMaster('local[*]')
+sc = pyspark.SparkContext(conf=conf)
+spark = SparkSession.builder.getOrCreate()
+
 
 
 # ==================  Methods:

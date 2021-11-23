@@ -25,6 +25,10 @@ conda list
 # Create (a data science) environment
 conda create -n ds python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
 
+# Create with Clone and then update /* don't update the base */ 
+conda create -n myenv --clone root
+conda update -n myenv --all
+
 # Delete an environment
 conda remove --name dsc --all
 
