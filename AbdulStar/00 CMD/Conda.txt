@@ -45,7 +45,7 @@ conda install –-name myenv scipy=0.15.0
 conda install pandas jupyter
 
 # Update a package:
-pip install pandas --upgrade
+pip install pyspark --upgrade
 
 # Delete a package:
 conda remove pytorch torchvision cudatoolkit

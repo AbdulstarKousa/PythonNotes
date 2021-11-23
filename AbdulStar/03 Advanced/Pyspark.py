@@ -13,7 +13,9 @@ install JDK version should be 8 or 11
 # For Anaconda:
 """
 !conda install -c cyclus java-jdk
-!conda install -c conda-forge pyspark
+!pip install pyspark
+!pip install pyspark --upgrade
+
 """
 
 # Setup Variables
@@ -61,6 +63,35 @@ sc = pyspark.SparkContext(conf=conf)
 spark = SparkSession.builder.getOrCreate()
 
 
+# ==================  Initilize Dynamic:
+sc = None
+def configured_spark_session(parallelism=None, shuffle_partitions=None, mem='4g'):
+    # Docs: Once a SparkConf object is passed to Spark, it is 
+    # cloned and can no longer be modified by the user. 
+    # Spark does not support modifying the configuration at runtime.
+    # Additionally, spark.driver.memory is honored only the FIRST time
+    # a sparkcontext is created (this is when the JVM starts). You have 
+    # to restart the kernel (killing the JVK) for mem argument to take 
+    # effect, even though the spark config will show a different value, 
+    # it's not actually the case (see Executors tab).
+    # We can change parallelism and shuffle_partitions with this function, but
+    # note this restarts (and thus clears) current spark session
+    global sc
+    conf = SparkConf() \
+            .set('spark.ui.port', '4051') \
+            .set('spark.driver.memory', mem) \
+            .set('spark.sql.adaptive.enabled', False) \
+            .setMaster('local[*]') # Uses all cores, can be set to integer
+    if parallelism: conf = conf.set('spark.default.parallelism', parallelism)
+    if shuffle_partitions: conf = conf.set('spark.sql.shuffle.partitions', shuffle_partitions)
+    if sc: sc.stop()
+    sc = pyspark.SparkContext(conf=conf)
+    spark = SparkSession.builder.getOrCreate()
+    return spark
+
+spark = configured_spark_session()
+sc.getConf().getAll()
+spark
 
 # ==================  Methods:
 # spark.read: 
@@ -252,3 +283,4 @@ df_operations \
     .agg(F.avg('TimeOnTarget').alias('avg_tot')) \
     .sort(F.asc('avg_tot')) \
     .toPandas()
+
