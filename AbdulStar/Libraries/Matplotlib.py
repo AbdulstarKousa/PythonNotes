@@ -124,6 +124,27 @@
 # #################################
 # # 5. multiple plots:
 # #################################
+# # enumerate 
+# # https://stackoverflow.com/questions/12319796/dynamically-add-create-subplots-in-matplotlib
+# # Set figure para
+# Tot  = len(repos_file_names.keys())
+# Cols = 2
+# # Compute Rows required
+# Rows = Tot // Cols 
+# Rows += Tot % Cols
+# # Create a Position index
+# Position = range(1,Tot + 1)
+# # Create main figure
+# fig = plt.figure( figsize = (Cols*4, Rows*4))
+# plt.subplots_adjust(hspace=0.25)
+# fig.suptitle(f'File Distribution for {user}', fontsize=10)
+# # Loop
+# for k in range(Tot):    
+#     ax = fig.add_subplot(Rows,Cols,Position[k])
+#     ax.pie(sizes, labels=labels, autopct='%1.0f%%', pctdistance=1.1, labeldistance=1.2, startangle=90)
+#     ax.set(title=f'{repo}')
+# plt.show()
+
 # fig, axs = plt.subplots(#nr_row, #nr_col, figsize=(15, 20), sharex=True)
 # fig.suptitle('super-title', fontsize=20)
 # for i,ax in enumerate(axs.flat):
@@ -138,7 +159,16 @@
 # axs[i].set_xticklabels(counts.index, rotation=-10)
 
 
-# enumerate 
+
+
+
+
+
+
+
+
+
+
 
 # #################################
 # # 6. Style:
@@ -146,6 +176,8 @@
 # from matplotlib import style
 # style.use("ggplot")                                              
 
+# import seaborn as sns
+# sns.set()
 
 # #################################
 # # 7. Jitter plot
@@ -215,7 +247,6 @@
 
 
 # from IPython import YouTubeVideo
-
 # YouTubeVideo()
 
 
