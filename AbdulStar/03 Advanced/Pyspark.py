@@ -16,6 +16,7 @@ install JDK version should be 8 or 11
 !pip install pyspark
 !pip install pyspark --upgrade
 
+
 """
 
 # Setup Variables
@@ -45,6 +46,12 @@ get_ipython().run_line_magic('matplotlib', 'inline')
 import seaborn as sns
 sns.set()
 
+# setup Variables
+import os
+os.environ["JAVA_HOME"] = NotImplemented #"C:\Program Files\Java\jdk-11.0.12" 
+os.environ['PYSPARK_PYTHON'] = 'python'
+os.environ['PYSPARK_DRIVER_PYTHON'] = 'jupyter'
+os.environ['PYSPARK_DRIVER_PYTHON_OPTS'] = 'notebook' 
 
 
 # ==================  Initilize:
@@ -62,9 +69,7 @@ conf = SparkConf()\
 sc = pyspark.SparkContext(conf=conf)
 spark = SparkSession.builder.getOrCreate()
 
-
-
-# ==================  Initilize Dynamic:
+# Initilize Dynamic:
 sc = None
 def configured_spark_session(parallelism=None, shuffle_partitions=None, mem='4g'):
     # Docs: Once a SparkConf object is passed to Spark, it is 
@@ -287,3 +292,13 @@ df_operations \
     .sort(F.asc('avg_tot')) \
     .toPandas()
 
+
+# uiWebUrl
+spark.sparkContext.uiWebUrl
+
+""" on colab """
+!wget -qnc https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+!unzip -n -q ngrok-stable-linux-amd64.zip
+get_ipython().system_raw('./ngrok http 4050 &')
+!sleep 5
+!curl -s http://localhost:4040/api/tunnels | grep -Po 'public_url":"(?=https)\K[^"]*'
