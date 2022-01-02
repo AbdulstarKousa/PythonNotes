@@ -1,3 +1,9 @@
+# ================== Toturial:
+"""
+https://towardsdatascience.com/a-neanderthals-guide-to-apache-spark-in-python-9ef1f156d427
+"""
+
+
 # ================== install:
 # Install java 
 """
@@ -7,6 +13,9 @@ install JDK version should be 8 or 11
 # For Anaconda:
 """
 !conda install -c cyclus java-jdk
+!pip install pyspark
+!pip install pyspark --upgrade
+
 
 """
 
@@ -27,23 +36,69 @@ import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import functions as F
 from pyspark import SparkContext, SparkConf
-import os
-os.environ["JAVA_HOME"] = "C:\Program Files\Java\jdk-11.0.12" 
-os.environ['PYSPARK_PYTHON'] = 'python'
-os.environ['PYSPARK_DRIVER_PYTHON'] = 'jupyter'
-os.environ['PYSPARK_DRIVER_PYTHON_OPTS'] = 'notebook'
 
 # related 
-import pandas
+import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-# %matplotlib inline
+from IPython import get_ipython
+get_ipython().run_line_magic('matplotlib', 'inline')
+import seaborn as sns
+sns.set()
+
+# setup Variables
+import os
+os.environ["JAVA_HOME"] = NotImplemented #"C:\Program Files\Java\jdk-11.0.12" 
+os.environ['PYSPARK_PYTHON'] = 'python'
+os.environ['PYSPARK_DRIVER_PYTHON'] = 'jupyter'
+os.environ['PYSPARK_DRIVER_PYTHON_OPTS'] = 'notebook' 
 
 
 # ==================  Initilize:
+# Without Seting memory and CPU cores
 conf  = SparkConf().set("spark.ui.port", "4050")
 sc    = pyspark.SparkContext(conf=conf)
 spark = SparkSession.builder.getOrCreate()
 spark
+
+# Sets memory limit on driver and to use all CPU cores
+conf = SparkConf()\
+        .set('spark.ui.port', '4050') \
+        .set('spark.driver.memory', '4g') \
+        .setMaster('local[*]')
+sc = pyspark.SparkContext(conf=conf)
+spark = SparkSession.builder.getOrCreate()
+
+# Initilize Dynamic:
+sc = None
+def configured_spark_session(parallelism=None, shuffle_partitions=None, mem='4g'):
+    # Docs: Once a SparkConf object is passed to Spark, it is 
+    # cloned and can no longer be modified by the user. 
+    # Spark does not support modifying the configuration at runtime.
+    # Additionally, spark.driver.memory is honored only the FIRST time
+    # a sparkcontext is created (this is when the JVM starts). You have 
+    # to restart the kernel (killing the JVK) for mem argument to take 
+    # effect, even though the spark config will show a different value, 
+    # it's not actually the case (see Executors tab).
+    # We can change parallelism and shuffle_partitions with this function, but
+    # note this restarts (and thus clears) current spark session
+    global sc
+    conf = SparkConf() \
+            .set('spark.ui.port', '4051') \
+            .set('spark.driver.memory', mem) \
+            .set('spark.sql.adaptive.enabled', False) \
+            .setMaster('local[*]') # Uses all cores, can be set to integer
+    if parallelism: conf = conf.set('spark.default.parallelism', parallelism)
+    if shuffle_partitions: conf = conf.set('spark.sql.shuffle.partitions', shuffle_partitions)
+    if sc: sc.stop()
+    sc = pyspark.SparkContext(conf=conf)
+    spark = SparkSession.builder.getOrCreate()
+    return spark
+
+spark = configured_spark_session()
+sc.getConf().getAll()
+spark
+
 
 
 # ==================  Methods:
@@ -236,3 +291,14 @@ df_operations \
     .agg(F.avg('TimeOnTarget').alias('avg_tot')) \
     .sort(F.asc('avg_tot')) \
     .toPandas()
+
+
+# uiWebUrl
+spark.sparkContext.uiWebUrl
+
+""" on colab """
+!wget -qnc https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+!unzip -n -q ngrok-stable-linux-amd64.zip
+get_ipython().system_raw('./ngrok http 4050 &')
+!sleep 5
+!curl -s http://localhost:4040/api/tunnels | grep -Po 'public_url":"(?=https)\K[^"]*'

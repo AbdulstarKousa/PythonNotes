@@ -1,7 +1,9 @@
 ################################# General:
-python --version
-conda -V
--q
+python --version    /* python version */
+conda -V            /* conda version  */
+-q                  /* after install to quit the print */ 
+-- user             /* at the end of install command to suits your os */
+
 
 ################################# Stable environment with no dependency conflicts:
 conda update --force conda
@@ -25,6 +27,10 @@ conda list
 # Create (a data science) environment
 conda create -n ds python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
 
+# Create with Clone and then update /* don't update the base */ 
+conda create -n myenv --clone root
+conda update -n myenv --all
+
 # Delete an environment
 conda remove --name dsc --all
 
@@ -41,11 +47,11 @@ conda install –-name myenv scipy=0.15.0
 conda install pandas jupyter
 
 # Update a package:
-pip install pandas --upgrade
+pip install pyspark --upgrade
 
 # Delete a package:
 conda remove pytorch torchvision cudatoolkit
-
+conda remove pandas-profiling
 
 ################################# Jupyter:
 # Make sure that ipykernel is installed

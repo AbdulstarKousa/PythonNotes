@@ -20,11 +20,11 @@ df_shootings = pd.read_csv('shootings.csv')
 df_states = pd.read_csv('shootings_states.csv')
 
 
-
 # Comment 
 """
 /*comment*/
 """
+
 # SELECT 
 ps.sqldf("""
 SELECT id, 
@@ -240,3 +240,7 @@ WHERE first_three.count > 40 AND last_three.count > 40
 
 ORDER BY state
 """)
+
+clean_transactions\
+       .groupBy(['company', 'year', 'quarter'])\
+       .agg(f.sum('price').alias('purchases'))

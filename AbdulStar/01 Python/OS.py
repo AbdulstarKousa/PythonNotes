@@ -5,4 +5,5 @@
 # os.path.join()
 # os.path.abspath()
 # os.chdir()
-# os.makedirs('images/train/class/', exist_ok=True)
+# os.path.dirname(__file__)
+# os.mkdir()
