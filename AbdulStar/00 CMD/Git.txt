@@ -8,10 +8,16 @@ git add .                       # stage all
 git commit -m "add message"     # commit with message
 git push                        # push 
 
+git add                         # specify files
+git commit                      # vim
+git push --set-upstream origin abdulstar
+
+
 #======================== branches
 git branch
 git checkout -b <my_branch_name> # create branch
 git checkout                     # to change between branches
+
 
 #======================== clone
 git clone https://github.com/my_user_name/my_repository_name.git
