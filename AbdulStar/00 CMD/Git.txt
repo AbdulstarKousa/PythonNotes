@@ -21,3 +21,8 @@ git checkout                     # to change between branches
 
 #======================== clone
 git clone https://github.com/my_user_name/my_repository_name.git
+
+#======================== Configuring a remote for a fork
+git remote -v
+git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
+git remote -v
