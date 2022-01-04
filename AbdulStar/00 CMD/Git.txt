@@ -7,9 +7,9 @@ git push # push
 git status # where are you in your commit 
 
 #======================== branches
+git branch
 git checkout -b <my_branch_name> # create branch
 git checkout # to change between branches
-git branch
 
 
 #======================== clone
