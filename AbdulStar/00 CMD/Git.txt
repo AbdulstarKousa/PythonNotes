@@ -1,26 +1,17 @@
-#======================== commit 
-git pull # pull
-git add # stage
-git commit # commit 
-git push # push 
-git status # where are you in your commit 
+#======================== general
+git status
 
-git commit -a
+
+#======================== commit 
+git pull                        # pull
+git add .                       # stage all
+git commit -m "add message"     # commit with message
+git push                        # push 
 
 #======================== branches
 git branch
 git checkout -b <my_branch_name> # create branch
-git checkout # to change between branches
-
+git checkout                     # to change between branches
 
 #======================== clone
 git clone https://github.com/my_user_name/my_repository_name.git
-
-
-#======================== Vim
-Esc – switch to command mode
-:w – write out changes that were made
-:q – exit Vim
-:q! – exit Vim and discard any changes
-:wq – saves the changes, and exits Vim
-:x – save the changes made, and exits Vim
