@@ -26,3 +26,6 @@ git clone https://github.com/my_user_name/my_repository_name.git
 git remote -v
 git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
 git remote -v
+
+syncing a fork
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork
