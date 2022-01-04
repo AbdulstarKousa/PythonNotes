@@ -1,0 +1,16 @@
+
+#======================== commit 
+git pull # pull
+git add # stage
+git commit # commit 
+git push # push 
+git status # where are you in your commit 
+
+#======================== branches
+git checkout -b <my_branch_name> # create branch
+git checkout # to change between branches
+git branch
+
+
+#======================== clone
+git clone https://github.com/my_user_name/my_repository_name.git
