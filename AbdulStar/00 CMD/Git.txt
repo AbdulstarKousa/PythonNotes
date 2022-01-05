@@ -1,6 +1,6 @@
 #======================== general
 git status
-
+git init
 
 #======================== commit 
 git pull                        # pull

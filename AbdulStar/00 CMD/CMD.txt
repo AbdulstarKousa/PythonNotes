@@ -1,0 +1,14 @@
+ls
+cd
+cd ..
+pwd
+mkdir
+touch
+code 
+cat
+cp
+cp -r
+rm 
+rm -r
+mv 
+head -n 6 README.md
