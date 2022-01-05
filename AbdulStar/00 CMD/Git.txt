@@ -1,12 +1,15 @@
 #======================== general
 git status
 git init
+git clone https://github.com/my_user_name/my_repository_name.git
+
 
 #======================== commit 
-git pull                        # pull
 git add .                       # stage all
 git commit -m "add message"     # commit with message
+git pull                        # pull
 git push                        # push 
+git fetch                       # pull push delete
 
 git add                         # specify files
 git commit                      # vim
@@ -14,18 +17,29 @@ git push --set-upstream origin abdulstar
 
 
 #======================== branches
-git branch
-git checkout -b <my_branch_name> # create branch
-git checkout                     # to change between branches
+git branch                          # see overview 
+git checkout -b <my_branch_name>    # create branch
+git checkout <my_branch_name>       # to change between branches
+git branch -d <my_branch_name>      # delete local if pushed
+git branch -D <my_branch_name>      # delete local force 
+git push <remote> --delete <branch> # delete remote
+git fetch                           # pull push delete local branchs not in remote
+git merge <my_branch_name>          # run it from the branch you want to merge <my_branch_name> to 
 
 
 #======================== clone
-git clone https://github.com/my_user_name/my_repository_name.git
 
-#======================== Configuring a remote for a fork
+
+#======================== Fork 
+# Configuring a remote for a fork (upstream)
 git remote -v
 git remote add upstream https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git
 git remote -v
 
-syncing a fork
+# Syncing a fork web
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork
+
+# Syncing a fork from the command line
+git fetch upstream
+git checkout main
+git merge upstream/main
