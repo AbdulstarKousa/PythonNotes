@@ -1,3 +1,4 @@
+prompt $g
 ls
 cd
 cd ..
