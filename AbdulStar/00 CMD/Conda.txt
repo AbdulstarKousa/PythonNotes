@@ -25,7 +25,9 @@ conda info --envs
 conda list
 
 # Create (a data science) environment
-conda create -n ds python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
+conda create -n <mlops2022> python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
+conda activate <mlops2022>
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 
 # Create with Clone and then update /* don't update the base */ 
 conda create -n myenv --clone root
