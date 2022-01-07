@@ -3,7 +3,7 @@ python --version    /* python version */
 conda -V            /* conda version  */
 -q                  /* after install to quit the print */ 
 -- user             /* at the end of install command to suits your os */
-
+conda install m2-base /*linux commands support*/
 
 ################################# Stable environment with no dependency conflicts:
 conda update --force conda
