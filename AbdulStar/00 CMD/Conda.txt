@@ -78,6 +78,8 @@ jupyter kernelspec uninstall dsc
 # pip freeze > requirements.txt
 # python -m pip freeze > requirements.txt
 # pip install -r requirements.txt
+# pip install -r requirements.txt --no-cache-dir
+
 
 ################################# Links:
 https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html
