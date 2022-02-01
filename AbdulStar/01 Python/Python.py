@@ -384,6 +384,10 @@
 # zip(lst1,lst2)
 # zip(*lst)
 
+# lst = sorted(lst,key=lambda x:-x[1])
+# lst = list(zip(*lst))
+
+
 
 # #################################
 # # examples: 

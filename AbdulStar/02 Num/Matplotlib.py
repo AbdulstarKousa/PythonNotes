@@ -250,6 +250,17 @@
 # YouTubeVideo()
 
 
+# """ 3 """
+# # Build the plot
+# fig, ax = plt.subplots(figsize=(10,6))
+# ax.bar(crimes, means, yerr=stds, align='edge', width=0.8, alpha=0.5, ecolor='black', capsize=5)
+# ax.set_ylabel('Mean')
+# ax.set_xlabel('Crime')
+# ax.set_xticks(range(len(crimes)))
+# ax.set_xticklabels(crimes,rotation=90)
+# ax.set_title('Crime per year by category')
+
+
 # """ more """
 # import matplotlib as mpl
 # mpl.rcParams.update(mpl.rcParamsDefault)
