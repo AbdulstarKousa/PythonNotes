@@ -43,6 +43,7 @@
 # or
 # color   =   'tab:gray'
 # """
+
 # # Shaded for error
 # plt.fill_between(xs, ys-std_, ys+std_)  
 
@@ -54,7 +55,6 @@
 
 # # line 
 # plt.plot([x1,x2], [y1,y2], c="black")
-
 
 # # write inside the figure:
 # plt.annotate(s="$\mu$",xy=(x_where + 0.1 , y_where + 0.1), size=20)
@@ -259,6 +259,29 @@
 # ax.set_xticks(range(len(crimes)))
 # ax.set_xticklabels(crimes,rotation=90)
 # ax.set_title('Crime per year by category')
+
+# # Build the plot
+# plt.figure(figsize=(10,6))
+# plt.bar(crimes, 
+#         means,
+#         width=0.9,
+#         alpha=0.5, 
+#         color='green',
+#         label='mean')
+# plt.errorbar(crimes, 
+#         means,
+#         yerr= stds, 
+#         ecolor='black', 
+#         capsize=3,
+#         fmt='none',
+#         label='std')
+# plt.xticks(crimes, crimes, rotation='vertical')
+# plt.ylabel('Mean')
+# plt.xlabel('Crime')
+# plt.title('Crime per year by category')
+# plt.legend()
+# plt.show()
+
 
 
 # """ more """
