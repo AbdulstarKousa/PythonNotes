@@ -1,10 +1,9 @@
  ---
 #
 # Python Notes:
-> AS : Abdul-Star
 
-> CD : 02582 Computational Data Analysis (2021)
+> Abdulstar Kousa
 
-> SD : 02806 Social Data Analysis and Visualization (2021) 
+> Courses from DTU
 #
  ---
