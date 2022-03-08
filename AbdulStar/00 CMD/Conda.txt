@@ -3,7 +3,7 @@ python --version    /* python version */
 conda -V            /* conda version  */
 -q                  /* after install to quit the print */ 
 -- user             /* at the end of install command to suits your os */
-
+conda install m2-base /*linux commands support*/
 
 ################################# Stable environment with no dependency conflicts:
 conda update --force conda
@@ -25,7 +25,9 @@ conda info --envs
 conda list
 
 # Create (a data science) environment
-conda create -n ds python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
+conda create -n <mlops2022> python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
+conda activate <mlops2022>
+conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 
 # Create with Clone and then update /* don't update the base */ 
 conda create -n myenv --clone root
@@ -74,7 +76,10 @@ jupyter kernelspec uninstall dsc
 
 ################################# requirements:
 # pip freeze > requirements.txt
+# python -m pip freeze > requirements.txt
 # pip install -r requirements.txt
+# pip install -r requirements.txt --no-cache-dir
+
 
 ################################# Links:
 https://docs.conda.io/projects/conda/en/4.6.0/user-guide/tasks/manage-environments.html

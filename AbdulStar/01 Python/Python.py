@@ -309,14 +309,41 @@
 #     while True:
 #         yield n
 #         n += 1
+# 10000000000000000000 in natural_numbers()
 
-# 10000 in natural_numbers()
+# x = iter(natural_numbers())
+# next(x)
+
+
+
+
+# #################################
+# # loop else
+# #################################
+# """ reach else if the loop was done """
+# for i in range(5):
+#     pass
+# else: 
+#     print("the loop is done!") 
+
+# """ can't reach else if the loop broken """
+# for i in range(10):
+#         break     
+# else: 
+#     print("this can't be reached!") 
+
+
+
+
+
 
 
 
 # #################################
 # # More:
 # ################################# 
+
+# TODO
 
 # # help
 # ?commandOrval                                     
@@ -356,6 +383,10 @@
 # # zip 
 # zip(lst1,lst2)
 # zip(*lst)
+
+# lst = sorted(lst,key=lambda x:-x[1])
+# lst = list(zip(*lst))
+
 
 
 # #################################
