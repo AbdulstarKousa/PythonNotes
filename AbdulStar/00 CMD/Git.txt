@@ -16,6 +16,8 @@ git commit                      # vim
 git push --set-upstream origin abdulstar
 
 
+git reset --soft HEAD~1         # delete last commit 
+
 #======================== branches
 git branch                          # see overview 
 git checkout -b <my_branch_name>    # create branch
