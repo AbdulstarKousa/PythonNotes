@@ -91,7 +91,10 @@ torch.cuda.is_available()
 x.to('cuda')
 x.to('cpu')
 
-
+# Permutation 
+dataset = x.copy()
+torch.randperm(len(dataset))
+dataset = dataset[perm]
 
 # ======================================
 # Introduction to PyTorch
