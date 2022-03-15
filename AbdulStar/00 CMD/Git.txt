@@ -2,7 +2,7 @@
 git status
 git init
 git clone https://github.com/my_user_name/my_repository_name.git
-
+git clone repo-name folder-name
 
 #======================== commit 
 git add .                       # stage all
