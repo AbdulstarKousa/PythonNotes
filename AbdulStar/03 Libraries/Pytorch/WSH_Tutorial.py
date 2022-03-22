@@ -1,6 +1,14 @@
 # ======================================
+# Install:  
+# ======================================
+# !nvcc --version
+# !conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+
+
+# ======================================
 # Torch intro 
 # ======================================
+
 
 # import 
 import torch 
