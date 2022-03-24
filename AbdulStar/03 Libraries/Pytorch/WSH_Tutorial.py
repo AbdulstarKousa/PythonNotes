@@ -1,9 +1,16 @@
 # ======================================
 # Install:  
 # ======================================
+# ------------ Coda version: 
 # !nvcc --version
+
+# ------------ Normal installation: 
 # !conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
 
+# ------------ If a problem happen then With -c conda-forge (safe) 
+# !pip uninstall torch 
+# !conda clean -a
+# !conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch -c conda-forge
 
 # ======================================
 # Torch intro 

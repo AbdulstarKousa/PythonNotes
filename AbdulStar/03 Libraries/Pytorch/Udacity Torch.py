@@ -268,7 +268,7 @@ The general process with PyTorch:
     percentage of classes the network predicted correctly. Other options are precision and recall and
     top-5 error rate
 """
-# ps.topk # This returns the highest values
+# ps.topk    # This returns the highest values
 # ps.topk(1) # This returns a tuple of the top-k values and the top-k indices.
 # equals = top_class == labels.view(*top_class.shape)
 

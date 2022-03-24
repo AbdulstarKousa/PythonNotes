@@ -10,8 +10,8 @@ conda update --force conda
 conda update anaconda
 conda update conda
 
-
 ################################# Clean remove unused packages from the cache: 
+conda clean -a
 conda clean --all
 conda clean --force-pkgs-dirs # WARNING: This will break environments with packages installed using symlinks back to the package cache.
 
@@ -28,6 +28,7 @@ conda list
 conda create -n <mlops2022> python=3.7.10 jupyterlab jupyter astroid babel pandas scipy seaborn scikit-learn
 conda activate <mlops2022>
 conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch
+
 
 # Create with Clone and then update /* don't update the base */ 
 conda create -n myenv --clone root
