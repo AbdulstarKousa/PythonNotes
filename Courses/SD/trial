@@ -1,0 +1,705 @@
+from pathlib import Path
+import json
+
+import fitz  # PyMuPDF
+import numpy as np
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
+
+
+# ============================================================
+# CONFIG
+# ============================================================
+
+PDF_PATH = Path(
+    r"path.pdf"
+)
+
+OUTPUT_DIR = Path("poc_output")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
+MAX_PAGES = None
+
+
+# ============================================================
+# EXTRACT EMBEDDED SCAN IMAGE
+# ============================================================
+
+def extract_embedded_image(doc, page):
+
+    images = page.get_images(full=True)
+
+    if not images:
+        return None
+
+    candidates = []
+
+    for img in images:
+
+        xref = img[0]
+
+        try:
+            pix = fitz.Pixmap(doc, xref)
+
+            candidates.append({
+                "xref": xref,
+                "width": pix.width,
+                "height": pix.height,
+                "area": pix.width * pix.height
+            })
+
+        except Exception as e:
+            print(
+                f"Could not inspect image "
+                f"xref={xref}: {e}"
+            )
+
+    if not candidates:
+        return None
+
+    # Largest image = most likely full-page scan
+    selected = max(
+        candidates,
+        key=lambda x: x["area"]
+    )
+
+    pix = fitz.Pixmap(
+        doc,
+        selected["xref"]
+    )
+
+    # Convert to RGB if necessary
+    if pix.n - pix.alpha > 3:
+        pix = fitz.Pixmap(
+            fitz.csRGB,
+            pix
+        )
+
+    mode = "RGBA" if pix.alpha else "RGB"
+
+    image = Image.frombytes(
+        mode,
+        [pix.width, pix.height],
+        pix.samples
+    )
+
+    return image
+
+
+# ============================================================
+# EXTRACT TEXT-LAYER WORDS
+# ============================================================
+
+def get_text_words(page):
+
+    words = page.get_text(
+        "words",
+        sort=True
+    )
+
+    result = []
+
+    for word in words:
+
+        (
+            x0,
+            y0,
+            x1,
+            y1,
+            text,
+            block_no,
+            line_no,
+            word_no
+        ) = word
+
+        text = text.strip()
+
+        if not text:
+            continue
+
+        result.append({
+            "text": text,
+            "bbox": [
+                x0,
+                y0,
+                x1,
+                y1
+            ],
+            "block": block_no,
+            "line": line_no,
+            "word": word_no
+        })
+
+    return result
+
+
+# ============================================================
+# PDF COORDINATES -> IMAGE COORDINATES
+# ============================================================
+
+def pdf_bbox_to_image_bbox(
+    bbox,
+    page_rect,
+    image_size
+):
+
+    x0, y0, x1, y1 = bbox
+
+    image_width, image_height = image_size
+
+    scale_x = (
+        image_width /
+        page_rect.width
+    )
+
+    scale_y = (
+        image_height /
+        page_rect.height
+    )
+
+    return (
+        int(x0 * scale_x),
+        int(y0 * scale_y),
+        int(x1 * scale_x),
+        int(y1 * scale_y)
+    )
+
+
+# ============================================================
+# CREATE TEXT MASK
+# ============================================================
+
+def create_text_mask(
+    words,
+    page_rect,
+    image_size,
+    padding=2
+):
+
+    width, height = image_size
+
+    mask = np.zeros(
+        (height, width),
+        dtype=np.uint8
+    )
+
+    for word in words:
+
+        bbox = pdf_bbox_to_image_bbox(
+            word["bbox"],
+            page_rect,
+            image_size
+        )
+
+        x0, y0, x1, y1 = bbox
+
+        x0 = max(
+            0,
+            x0 - padding
+        )
+
+        y0 = max(
+            0,
+            y0 - padding
+        )
+
+        x1 = min(
+            width,
+            x1 + padding
+        )
+
+        y1 = min(
+            height,
+            y1 + padding
+        )
+
+        mask[
+            y0:y1 + 1,
+            x0:x1 + 1
+        ] = 255
+
+    return mask
+
+
+# ============================================================
+# SIMPLE INK DETECTION
+# ============================================================
+
+def detect_dark_pixels(image):
+
+    """
+    Detect dark pixels.
+
+    No OpenCV.
+    Just NumPy.
+
+    Returns:
+        binary mask
+    """
+
+    gray = np.asarray(
+        image.convert("L")
+    )
+
+    # Adjust this later if needed.
+    threshold = 180
+
+    ink = gray < threshold
+
+    return (
+        ink.astype(np.uint8) * 255
+    )
+
+
+# ============================================================
+# REMOVE TEXT-LAYER AREAS
+# ============================================================
+
+def get_unexplained_ink(
+    image,
+    text_mask
+):
+
+    ink_mask = detect_dark_pixels(
+        image
+    )
+
+    # Keep only ink outside
+    # the existing text layer.
+    unexplained = np.where(
+        text_mask == 0,
+        ink_mask,
+        0
+    )
+
+    return unexplained.astype(
+        np.uint8
+    )
+
+
+# ============================================================
+# SIMPLE NOISE REMOVAL
+# ============================================================
+
+def remove_small_components(mask):
+
+    """
+    Connected components using only NumPy.
+
+    This is intentionally simple.
+    We don't need OpenCV yet.
+    """
+
+    height, width = mask.shape
+
+    visited = np.zeros(
+        (height, width),
+        dtype=bool
+    )
+
+    output = np.zeros_like(
+        mask
+    )
+
+    # 8-neighbourhood
+    neighbours = [
+        (-1, -1),
+        (-1,  0),
+        (-1,  1),
+        ( 0, -1),
+        ( 0,  1),
+        ( 1, -1),
+        ( 1,  0),
+        ( 1,  1),
+    ]
+
+    min_area = 15
+
+    for y in range(height):
+
+        for x in range(width):
+
+            if mask[y, x] == 0:
+                continue
+
+            if visited[y, x]:
+                continue
+
+            # Start component
+            stack = [(y, x)]
+            visited[y, x] = True
+
+            component = []
+
+            while stack:
+
+                cy, cx = stack.pop()
+
+                component.append(
+                    (cy, cx)
+                )
+
+                for dy, dx in neighbours:
+
+                    ny = cy + dy
+                    nx = cx + dx
+
+                    if ny < 0 or ny >= height:
+                        continue
+
+                    if nx < 0 or nx >= width:
+                        continue
+
+                    if visited[ny, nx]:
+                        continue
+
+                    if mask[ny, nx] == 0:
+                        continue
+
+                    visited[ny, nx] = True
+
+                    stack.append(
+                        (ny, nx)
+                    )
+
+            # Keep sufficiently large components
+            if len(component) >= min_area:
+
+                for cy, cx in component:
+                    output[cy, cx] = 255
+
+    return output
+
+
+# ============================================================
+# DRAW VISUALIZATION
+# ============================================================
+
+def create_visualization(
+    image,
+    words,
+    page_rect,
+    unexplained_ink,
+    output_path
+):
+
+    rgb = np.array(
+        image.convert("RGB")
+    )
+
+    visualization = rgb.copy()
+
+    # --------------------------------------------------------
+    # RED = unexplained ink
+    # --------------------------------------------------------
+
+    red = (
+        unexplained_ink > 0
+    )
+
+    visualization[red] = [
+        255,
+        80,
+        80
+    ]
+
+    vis = Image.fromarray(
+        visualization
+    )
+
+    draw = ImageDraw.Draw(
+        vis
+    )
+
+    # --------------------------------------------------------
+    # GREEN = existing text layer
+    # --------------------------------------------------------
+
+    for word in words:
+
+        bbox = pdf_bbox_to_image_bbox(
+            word["bbox"],
+            page_rect,
+            image.size
+        )
+
+        x0, y0, x1, y1 = bbox
+
+        draw.rectangle(
+            [x0, y0, x1, y1],
+            outline="green",
+            width=2
+        )
+
+    vis.save(
+        output_path
+    )
+
+    return vis
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+print("=" * 70)
+print("PDF SCAN / TEXT-LAYER POC")
+print("=" * 70)
+
+print(
+    f"\nPDF: {PDF_PATH}"
+)
+
+print(
+    f"Output: "
+    f"{OUTPUT_DIR.resolve()}"
+)
+
+
+if not PDF_PATH.exists():
+
+    raise FileNotFoundError(
+        f"PDF not found:\n{PDF_PATH}"
+    )
+
+
+doc = fitz.open(
+    PDF_PATH
+)
+
+print(
+    f"\nPages: {len(doc)}"
+)
+
+
+pages_to_process = len(doc)
+
+if MAX_PAGES is not None:
+
+    pages_to_process = min(
+        MAX_PAGES,
+        len(doc)
+    )
+
+
+for page_index in range(
+    pages_to_process
+):
+
+    page_no = page_index + 1
+
+    page = doc[page_index]
+
+    print(
+        "\n" + "=" * 70
+    )
+
+    print(
+        f"PAGE {page_no}"
+    )
+
+    print(
+        "=" * 70
+    )
+
+    # --------------------------------------------------------
+    # Text layer
+    # --------------------------------------------------------
+
+    words = get_text_words(
+        page
+    )
+
+    text = page.get_text(
+        "text",
+        sort=True
+    )
+
+    print(
+        f"Text characters: "
+        f"{len(text)}"
+    )
+
+    print(
+        f"Text words: "
+        f"{len(words)}"
+    )
+
+    # --------------------------------------------------------
+    # Embedded scan
+    # --------------------------------------------------------
+
+    image = extract_embedded_image(
+        doc,
+        page
+    )
+
+    if image is None:
+
+        print(
+            "WARNING: "
+            "No embedded image found."
+        )
+
+        continue
+
+    print(
+        f"Scan image: "
+        f"{image.width} x "
+        f"{image.height}"
+    )
+
+    # --------------------------------------------------------
+    # Save original scan
+    # --------------------------------------------------------
+
+    scan_path = (
+        OUTPUT_DIR /
+        f"page_{page_no:04d}_scan.png"
+    )
+
+    image.save(
+        scan_path
+    )
+
+    print(
+        f"Saved: {scan_path}"
+    )
+
+    # --------------------------------------------------------
+    # Save words
+    # --------------------------------------------------------
+
+    words_path = (
+        OUTPUT_DIR /
+        f"page_{page_no:04d}_words.json"
+    )
+
+    with open(
+        words_path,
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        json.dump(
+            words,
+            f,
+            ensure_ascii=False,
+            indent=2
+        )
+
+    # --------------------------------------------------------
+    # Create text mask
+    # --------------------------------------------------------
+
+    text_mask = create_text_mask(
+        words,
+        page.rect,
+        image.size
+    )
+
+    # --------------------------------------------------------
+    # Find unexplained ink
+    # --------------------------------------------------------
+
+    unexplained = get_unexplained_ink(
+        image,
+        text_mask
+    )
+
+    # --------------------------------------------------------
+    # Remove tiny noise
+    # --------------------------------------------------------
+
+    unexplained = remove_small_components(
+        unexplained
+    )
+
+    # --------------------------------------------------------
+    # Statistics
+    # --------------------------------------------------------
+
+    ink_pixels = int(
+        np.count_nonzero(
+            unexplained
+        )
+    )
+
+    total_pixels = (
+        image.width *
+        image.height
+    )
+
+    ratio = (
+        ink_pixels /
+        total_pixels *
+        100
+    )
+
+    print(
+        f"Unexplained ink: "
+        f"{ink_pixels:,} pixels"
+    )
+
+    print(
+        f"Unexplained ratio: "
+        f"{ratio:.4f}%"
+    )
+
+    # --------------------------------------------------------
+    # Visualization
+    # --------------------------------------------------------
+
+    visualization_path = (
+        OUTPUT_DIR /
+        f"page_{page_no:04d}_visualization.png"
+    )
+
+    vis = create_visualization(
+        image=image,
+        words=words,
+        page_rect=page.rect,
+        unexplained_ink=unexplained,
+        output_path=visualization_path
+    )
+
+    print(
+        f"Visualization: "
+        f"{visualization_path}"
+    )
+
+    # --------------------------------------------------------
+    # Display
+    # --------------------------------------------------------
+
+    plt.figure(
+        figsize=(12, 16)
+    )
+
+    plt.imshow(vis)
+
+    plt.title(
+        f"Page {page_no}"
+    )
+
+    plt.axis("off")
+
+    plt.tight_layout()
+
+    plt.show()
+
+
+doc.close()
+
+print(
+    "\n" + "=" * 70
+)
+
+print(
+    "DONE"
+)
+
+print(
+    f"\nResults:\n"
+    f"{OUTPUT_DIR.resolve()}"
+)
