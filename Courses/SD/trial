@@ -1,39 +1,74 @@
-from PIL import Image, ImageOps, ImageEnhance, ImageFilter
+import numpy as np
 
-def enhance_text(crop, scale=3):
-    gray = ImageOps.grayscale(crop)
+def get_candidate_boxes(mask, min_pixels=20, padding=10):
+    binary = np.asarray(mask) > 0
+    height, width = binary.shape
 
-    # Reduce isolated scan noise
-    denoised = gray.filter(ImageFilter.MedianFilter(size=3))
+    visited = np.zeros_like(binary, dtype=bool)
+    boxes = []
 
-    # Upscale
-    enlarged = denoised.resize(
-        (denoised.width * scale, denoised.height * scale),
-        Image.Resampling.LANCZOS
+    for y in range(height):
+        for x in range(width):
+            if not binary[y, x] or visited[y, x]:
+                continue
+
+            stack = [(y, x)]
+            visited[y, x] = True
+
+            xs, ys = [], []
+
+            while stack:
+                cy, cx = stack.pop()
+                xs.append(cx)
+                ys.append(cy)
+
+                for dy in (-1, 0, 1):
+                    for dx in (-1, 0, 1):
+                        ny, nx = cy + dy, cx + dx
+
+                        if (
+                            0 <= ny < height
+                            and 0 <= nx < width
+                            and binary[ny, nx]
+                            and not visited[ny, nx]
+                        ):
+                            visited[ny, nx] = True
+                            stack.append((ny, nx))
+
+            if len(xs) < min_pixels:
+                continue
+
+            boxes.append((
+                max(0, min(xs) - padding),
+                max(0, min(ys) - padding),
+                min(width, max(xs) + padding + 1),
+                min(height, max(ys) + padding + 1)
+            ))
+
+    return boxes
+
+
+
+boxes = get_candidate_boxes(unexplained_ink)
+
+print("Candidates:", len(boxes))
+
+for i, (x0, y0, x1, y1) in enumerate(boxes):
+    crop = image.crop((x0, y0, x1, y1))
+
+    versions = enhance_text(crop)
+
+    versions["sharpened"].save(
+        f"candidate_{i:04d}.png"
     )
 
-    # Contrast enhancement
-    contrast = ImageOps.autocontrast(enlarged, cutoff=1)
 
-    # Sharpen
-    sharpened = contrast.filter(
-        ImageFilter.UnsharpMask(
-            radius=1.2,
-            percent=150,
-            threshold=3
-        )
-    )
 
-    # Binary threshold
-    binary = sharpened.point(
-        lambda p: 255 if p > 170 else 0
-    )
 
-    return {
-        "original": crop,
-        "grayscale": gray,
-        "denoised": denoised,
-        "contrast": contrast,
-        "sharpened": sharpened,
-        "binary": binary,
-    }
+
+
+
+
+
+
+
